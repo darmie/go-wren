@@ -274,10 +274,11 @@ import (
 const MAX_REGISTRATIONS = 128
 
 var (
-	fMap      = make(map[int]func())
+	fMap = make(map[int]func())
 	fMapGuard sync.Mutex
-	counter   int
+	counter int
 )
+
 
 //export f0
 func f0(vm unsafe.Pointer) {
@@ -1431,8 +1432,9 @@ func f127(vm unsafe.Pointer) {
 	f()
 }
 
+
 func registerFunc(name string, f func()) (unsafe.Pointer, error) {
-	if (counter + 1) >= MAX_REGISTRATIONS {
+	if (counter+1) >= MAX_REGISTRATIONS {
 		return nil, errors.New("maximum function registration reached")
 	}
 

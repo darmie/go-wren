@@ -139,30 +139,31 @@ func (vm *VM) GC() {
 }
 
 // Interpret interprets the provided Wren source code.
-func (vm *VM) Interpret(source string) error {
+func (vm *VM) Interpret(module string, source string) error {
 	c_source := C.CString(source)
+	c_module := C.CString(module)
 	defer C.free(unsafe.Pointer(c_source))
-	return interpretResultToErr(C.wrenInterpret(vm.vm, c_source))
+	return interpretResultToErr(C.wrenInterpret(vm.vm, c_module, c_source))
 }
 
 // InterpretFile interprets the Wren source code in the provided file.
-func (vm *VM) InterpretFile(filename string) error {
+func (vm *VM) InterpretFile(module, filename string) error {
 	contents, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return err
 	}
-	return vm.Interpret(string(contents))
+	return vm.Interpret(module, string(contents))
 }
 
 // InterpretReader interprets the Wren source code from the provided reader.
 // Note that the reader must be read fully before interpretation will begin;
 // it's not possible to interpret an infinite stream of input.
-func (vm *VM) InterpretReader(r io.Reader) error {
+func (vm *VM) InterpretReader(module string, r io.Reader) error {
 	contents, err := ioutil.ReadAll(r)
 	if err != nil {
 		return err
 	}
-	return vm.Interpret(string(contents))
+	return vm.Interpret(module, string(contents))
 }
 
 // TODO: implement this better. It should automatically pick an available

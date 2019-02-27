@@ -1,8 +1,6 @@
 package wren_test
 
-import (
-	"github.com/dradtke/go-wren"
-)
+import wren "bitbucket.org/eridenmk/dbl-konstruct/go-wren"
 
 func ExampleWrenVM_Interpret() {
 	const program = `
@@ -10,7 +8,7 @@ func ExampleWrenVM_Interpret() {
 	`
 
 	vm := wren.NewVM()
-	if err := vm.Interpret(program); err != nil {
+	if err := vm.Interpret("main", program); err != nil {
 		panic(err)
 	}
 }

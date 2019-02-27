@@ -3,7 +3,7 @@ package wren_test
 import (
 	"fmt"
 
-	"github.com/dradtke/go-wren"
+	wren "bitbucket.org/eridenmk/dbl-konstruct/go-wren"
 )
 
 // Foreign classes can be any type, but usually you'll want a struct.
@@ -40,7 +40,7 @@ func Example_foreignClass() {
 	vm.RegisterForeignClass("God", NewGod)
 	vm.RegisterForeignMethod("God.getMessage(_)", GetGodsMessage)
 
-	if err := vm.Interpret(program); err != nil {
+	if err := vm.Interpret("main", program); err != nil {
 		panic(err)
 	}
 }

@@ -3,7 +3,7 @@ package wren_test
 import (
 	"fmt"
 
-	"github.com/dradtke/go-wren"
+	wren "bitbucket.org/eridenmk/dbl-konstruct/go-wren"
 )
 
 func Example_callWren() {
@@ -16,7 +16,7 @@ func Example_callWren() {
 	`
 
 	vm := wren.NewVM()
-	if err := vm.Interpret(program); err != nil {
+	if err := vm.Interpret("main", program); err != nil {
 		panic(err)
 	}
 

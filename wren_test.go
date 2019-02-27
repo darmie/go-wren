@@ -6,14 +6,14 @@ import (
 	"io/ioutil"
 	"testing"
 
-	"github.com/dradtke/go-wren"
+	wren "bitbucket.org/eridenmk/dbl-konstruct/go-wren"
 )
 
 func TestCompilationError(t *testing.T) {
 	vm := wren.NewVM()
 	wren.SetErrorWriter(ioutil.Discard)
 
-	if err := vm.Interpret(`Don't mind me, I'm just an invalid Wren program!`); err == nil {
+	if err := vm.Interpret("main", `Don't mind me, I'm just an invalid Wren program!`); err == nil {
 		t.Error("interpretation of invalid program failed to return an error")
 	}
 }
@@ -23,7 +23,7 @@ func TestOutputRedirect(t *testing.T) {
 	vm := wren.NewVM()
 	vm.SetOutputWriter(&buf)
 
-	if err := vm.Interpret(`System.print("Hello, Wren!")`); err != nil {
+	if err := vm.Interpret("main", `System.print("Hello, Wren!")`); err != nil {
 		t.Log("interpretation error: ", err)
 		t.FailNow()
 	}
@@ -41,7 +41,7 @@ func TestForeignMethod(t *testing.T) {
 		return a + b
 	})
 
-	if err := vm.Interpret(`
+	if err := vm.Interpret("main", `
 		class GoMath {
 			foreign static add(x, y)
 		}
@@ -63,7 +63,7 @@ func TestForeignMethod(t *testing.T) {
 	}()
 
 	// This call should panic.
-	vm.Interpret(`GoMath.add("x", "y")`)
+	vm.Interpret("main", `GoMath.add("x", "y")`)
 }
 
 func TestForeignClass(t *testing.T) {
@@ -83,7 +83,7 @@ func TestForeignClass(t *testing.T) {
 		return fmt.Sprintf(g.msg, name)
 	})
 
-	if err := vm.Interpret(`
+	if err := vm.Interpret("main", `
 		foreign class God {
 			construct new() {}
 			foreign getMessage(name)
@@ -104,7 +104,7 @@ func TestForeignClass(t *testing.T) {
 func TestCallWren(t *testing.T) {
 	vm := wren.NewVM()
 
-	if err := vm.Interpret(`
+	if err := vm.Interpret("main", `
 		class WrenMath {
 			static do_add(a, b) {
 				return a + b
